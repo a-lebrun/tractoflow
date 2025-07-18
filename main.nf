@@ -1107,7 +1107,7 @@ process Normalize_DWI {
           $bval $bvec $params.dti_shells dwi_dti.nii.gz \
           bval_dti bvec_dti -t $params.dwi_shell_tolerance
       scil_compute_dti_metrics.py dwi_dti.nii.gz bval_dti bvec_dti --mask $mask\
-          --not_all --fa fa.nii.gz ---force_b0_threshold
+          --not_all --fa fa.nii.gz --force_b0_threshold
       mrthreshold fa.nii.gz ${sid}_fa_wm_mask.nii.gz -abs $params.fa_mask_threshold -nthreads 1
       dwinormalise individual $dwi ${sid}_fa_wm_mask.nii.gz ${sid}__dwi_normalized.nii.gz\
           -fslgrad $bvec $bval -nthreads 1
@@ -1124,7 +1124,7 @@ process Normalize_DWI {
             $bval $bvec \$shells dwi_dti.nii.gz \
             bval_dti bvec_dti -t $params.dwi_shell_tolerance
         scil_compute_dti_metrics.py dwi_dti.nii.gz bval_dti bvec_dti --mask $mask\
-            --not_all --fa fa.nii.gz ---force_b0_threshold
+            --not_all --fa fa.nii.gz --force_b0_threshold
         mrthreshold fa.nii.gz ${sid}_fa_wm_mask.nii.gz -abs $params.fa_mask_threshold -nthreads 1
         dwinormalise individual $dwi ${sid}_fa_wm_mask.nii.gz ${sid}__dwi_normalized.nii.gz\
             -fslgrad $bvec $bval -nthreads 1
@@ -1355,7 +1355,7 @@ process DTI_Metrics {
         --non-physical ${sid}__nonphysical.nii.gz\
         --pulsation ${sid}__pulsation.nii.gz\
         --residual ${sid}__residual.nii.gz\
-        -f ---force_b0_threshold
+        -f --force_b0_threshold
     """
 }
 
@@ -1615,7 +1615,7 @@ process Compute_FRF {
         export OPENBLAS_NUM_THREADS=1
         scil_compute_ssst_frf.py $dwi $bval $bvec frf.txt --mask $b0_mask\
         --fa $params.fa --min_fa $params.min_fa --min_nvox $params.min_nvox\
-        --roi_radii $params.roi_radius ---force_b0_threshold
+        --roi_radii $params.roi_radius --force_b0_threshold
         scil_set_response_function.py frf.txt $params.manual_frf ${sid}__frf.txt
         """
     else
@@ -1625,7 +1625,7 @@ process Compute_FRF {
         export OPENBLAS_NUM_THREADS=1
         scil_compute_ssst_frf.py $dwi $bval $bvec ${sid}__frf.txt --mask $b0_mask\
         --fa $params.fa --min_fa $params.min_fa --min_nvox $params.min_nvox\
-        --roi_radii $params.roi_radius ---force_b0_threshold
+        --roi_radii $params.roi_radius --force_b0_threshold
         """
 }
 
@@ -1693,7 +1693,7 @@ process FODF_Metrics {
     export OMP_NUM_THREADS=1
     export OPENBLAS_NUM_THREADS=1
     scil_compute_ssst_fodf.py $dwi $bval $bvec $frf ${sid}__fodf.nii.gz\
-        --sh_order $params.sh_order --sh_basis $params.basis ---force_b0_threshold\
+        --sh_order $params.sh_order --sh_basis $params.basis --force_b0_threshold\
         --mask $b0_mask --processes $task.cpus
 
     scil_compute_fodf_max_in_ventricles.py ${sid}__fodf.nii.gz $fa $md\
