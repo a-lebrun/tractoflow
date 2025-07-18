@@ -486,7 +486,7 @@ process Bet_Prelim_DWI {
     export OPENBLAS_NUM_THREADS=1
     scil_image_math.py convert $dwi $dwi --data_type float32 -f
     scil_dwi_extract_b0.py $dwi $bval $bvec ${sid}__b0.nii.gz --mean\
-        --b0_threshold $params.b0_thr_extract_b0 --force_b0_threshold
+        --b0_threshold $params.b0_thr_extract_b0
     bet ${sid}__b0.nii.gz ${sid}__b0_bet.nii.gz -m -R -f $params.bet_prelim_f
     scil_image_math.py convert ${sid}__b0_bet_mask.nii.gz ${sid}__b0_bet_mask.nii.gz --data_type uint8 -f
     maskfilter ${sid}__b0_bet_mask.nii.gz dilate ${sid}__b0_bet_mask_dilated.nii.gz\
@@ -611,7 +611,7 @@ process Prepare_for_Topup {
   script:
   """
     scil_dwi_extract_b0.py $dwi $bval $bvec ${sid}_${rev}b0_mean.nii.gz --mean\
-        --b0_threshold $params.b0_thr_extract_b0 --force_b0_threshold
+        --b0_threshold $params.b0_thr_extract_b0
   """
 }
 
@@ -898,7 +898,7 @@ process Bet_DWI {
     export OMP_NUM_THREADS=1
     export OPENBLAS_NUM_THREADS=1
     scil_dwi_extract_b0.py $dwi $bval $bvec ${sid}__b0_no_bet.nii.gz --mean\
-            --b0_threshold $params.b0_thr_extract_b0 --force_b0_threshold
+            --b0_threshold $params.b0_thr_extract_b0
     bet ${sid}__b0_no_bet.nii.gz ${sid}__b0_bet.nii.gz -m -R -f $params.bet_dwi_final_f
     scil_image_math.py convert ${sid}__b0_bet_mask.nii.gz ${sid}__b0_bet_mask.nii.gz --data_type uint8 -f
     mrcalc $dwi ${sid}__b0_bet_mask.nii.gz -mult ${sid}__dwi_bet.nii.gz -quiet -nthreads 1
@@ -1197,7 +1197,7 @@ process Extract_B0 {
     export OMP_NUM_THREADS=1
     export OPENBLAS_NUM_THREADS=1
     scil_dwi_extract_b0.py $dwi $bval $bvec ${sid}__b0_resampled.nii.gz --mean\
-        --b0_threshold $params.b0_thr_extract_b0 --force_b0_threshold
+        --b0_threshold $params.b0_thr_extract_b0
     mrthreshold ${sid}__b0_resampled.nii.gz ${sid}__b0_mask_resampled.nii.gz\
         --abs 0.00001 -nthreads 1
     """
