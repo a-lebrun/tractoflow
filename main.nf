@@ -795,8 +795,7 @@ process Eddy_Topup {
           mv $bval ${sid}__bval_eddy
 	else
 	   scil_validate_and_correct_eddy_gradients.py dwi_eddy_corrected.eddy_rotated_bvecs $bval ${number_rev_dwi} ${sid}__dwi_eddy_corrected.bvec ${sid}__bval_eddy
-	fi
-	
+	fi	
 	"""
 }
 
