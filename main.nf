@@ -780,9 +780,9 @@ process Eddy_Topup {
             --readout $readout --out_script --fix_seed\
             --n_reverse ${number_rev_dwi}\
             --lsr_resampling\
-            --eddy_options "--cnr_maps"\
+            --eddy_options "--cnr_maps "\
             $slice_drop_flag
-	echo " --very_verbose" >> eddy.sh
+	echo "--very_verbose" >> eddy.sh
 	sh eddy.sh
         fslmaths dwi_eddy_corrected.nii.gz -thr 0 ${sid}__dwi_corrected.nii.gz
         mv dwi_eddy_corrected.eddy_cnr_maps.nii.gz ${sid}__cnr_maps.nii.gz
