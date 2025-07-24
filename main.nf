@@ -755,10 +755,7 @@ process Eddy_Topup {
     set sid, "${sid}__bval_eddy", "${sid}__dwi_eddy_corrected.bvec" into\
         gradients_from_eddy_topup
     file "${sid}__b0_bet_mask.nii.gz"
-    file "dwi_eddy_corrected.*"
-    file "index.txt"
-    file "acqparams.txt"
-    file "non_zero_norm.bvecs"
+    file "${sid}__cnr_maps.nii.gz"
 
     when:
     (rev_b0_count > 0 || rev_dwi_count > 0) && params.run_topup && params.run_eddy
@@ -783,11 +780,12 @@ process Eddy_Topup {
             --readout $readout --out_script --fix_seed\
             --n_reverse ${number_rev_dwi}\
             --lsr_resampling\
-            --eddy_options "--cnr_maps --residuals"\
+            --eddy_options "--cnr_maps"\
             $slice_drop_flag
 	echo " --very_verbose" >> eddy.sh
 	sh eddy.sh
         fslmaths dwi_eddy_corrected.nii.gz -thr 0 ${sid}__dwi_corrected.nii.gz
+        mv dwi_eddy_corrected.eddy_cnr_maps.nii.gz ${sid}__cnr_maps.nii.gz
 
 	if [[ $number_rev_dwi -eq 0 ]]
 	then
